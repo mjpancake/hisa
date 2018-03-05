@@ -4,6 +4,7 @@ import (
 	"log"
 	"strings"
 
+	"github.com/microcosm-cc/bluemonday"
 	"github.com/importcjj/sensitive"
 )
 
@@ -23,6 +24,12 @@ func CheckName(name string) bool {
 	}
 
 	if found, _ := filter.FindIn(name); found {
+		return false
+	}
+
+	p := bluemonday.UGCPolicy()
+	ans := p.Sanitize(name)
+	if (ans != name) {
 		return false
 	}
 
